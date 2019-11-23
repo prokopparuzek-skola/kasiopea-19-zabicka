@@ -10,7 +10,6 @@ typedef struct {
 } vstup;
 
 void* comp(void *i) {
-        fprintf(stderr, "RUN!\n");
         vstup *in = (vstup *)i;
         int *graph;
         graph = malloc(in->N*sizeof(int));
@@ -72,7 +71,7 @@ int main() {
     data = malloc(T*sizeof(int*));
     results = malloc(T*sizeof(int));
     vlakna = malloc(T*sizeof(pthread_t));
-    vstupy = malloc(T*sizeof(vstupy));
+    vstupy = malloc(T*sizeof(vstup));
     if (data == NULL || results == NULL || vlakna == NULL || vstupy == NULL) {
         fputs("hodneNelze alokovat", stderr);
         exit(1);
@@ -81,23 +80,21 @@ int main() {
         int N;
         int *kameny;
         vstup in;
-        pthread_t f;
         scanf("%d", &N);
         kameny = malloc(N*sizeof(int));
-        data[i] = kameny;
         if (kameny == NULL) {
             fputs("kamenyNelze alokovat", stderr);
             exit(1);
         }
-        for (int i = 0; i < N; i++) {
-            scanf("%d", kameny+i);
+        data[i] = kameny;
+        for (int j = 0; j < N; j++) {
+            scanf("%d", kameny+j);
         }
         in.kameny = kameny;
         in.N = N;
         in.result = results+i;
         vstupy[i] = in;
-        pthread_create(&f, NULL, comp, (void *) vstupy+i);
-        vlakna[i] = f;
+        pthread_create(vlakna+i, NULL, comp, (void *) &vstupy[i]);
     }
     for (int i = 0; i < T; i++) {
         pthread_join(vlakna[i], NULL);
