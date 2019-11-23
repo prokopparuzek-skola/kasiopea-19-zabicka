@@ -2,8 +2,9 @@ package main
 
 import "fmt"
 
-func comp(kameny *[]uint, task chan uint) {
-	N := uint(len(*kameny))
+func comp(kameny []uint, task chan uint) {
+	println("OK!")
+	N := uint(len(kameny))
 	graph := make([]uint, N)
 	pA := make([]uint, N)
 	pF := make([]uint, N)
@@ -13,9 +14,9 @@ func comp(kameny *[]uint, task chan uint) {
 	for i := uint(0); ; i++ {
 	cyklus:
 		for j := uint(0); j < iA; j++ {
-			fmt.Println(pA, iA, graph)
-			for k := uint(1); k < (*kameny)[pA[j]]; k++ {
+			for k := uint(1); k <= kameny[pA[j]]; k++ {
 				if pA[j]+k == N {
+					println("OK")
 					test = true
 					i++
 					break cyklus
@@ -42,14 +43,18 @@ func main() {
 	var T uint
 	fmt.Scanf("%d", &T)
 	result := make([]chan uint, T)
+	for i := 0; i < int(T); i++ {
+		result[i] = make(chan uint)
+	}
 	for i := uint(0); i < T; i++ {
 		var N uint
 		fmt.Scanf("%d", &N)
 		kameny := make([]uint, N)
 		for j := uint(0); j < N; j++ {
-			fmt.Scanf("%d", &kameny[j])
+			fmt.Scanf(" %d", &kameny[j])
 		}
-		go comp(&kameny, result[i])
+		println("Run!")
+		go comp(kameny, result[i])
 	}
 	for i := uint(0); i < T; i++ {
 		fmt.Printf("%d\n", <-result[i])
