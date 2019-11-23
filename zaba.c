@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <time.h>
 
 typedef struct {
     int *kameny;
@@ -98,7 +99,6 @@ int main() {
         vstupy[i] = in;
         pthread_create(&f, NULL, comp, (void *) vstupy+i);
         vlakna[i] = f;
-        system("sleep 0.4");
     }
     for (int i = 0; i < T; i++) {
         pthread_join(vlakna[i], NULL);
