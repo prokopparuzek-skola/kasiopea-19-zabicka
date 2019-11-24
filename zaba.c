@@ -12,6 +12,7 @@ typedef struct {
 void* comp(void *i) {
         vstup *in = (vstup *)i;
         int *graph;
+        int max = 0;
         graph = malloc(in->N*sizeof(int));
         if (graph == NULL) {
             fputs("compNelze alokovat", stderr);
@@ -29,7 +30,8 @@ void* comp(void *i) {
         char test = 0;
         for (int i = 0;; i++) {
             for (int j = 0; j < iA; j++) {
-                for (int k = 1; k <= in->kameny[pA[j]]; k++) {
+                int k = pA[j] + in->kameny[pA[j]] - max < 0?max:max <= pA[j]?1:pA[j] + in->kameny[pA[j]]-max;
+                for (; k <= in->kameny[pA[j]]; k++) {
                     if (pA[j]+k == in->N) {
                         fprintf(stderr, "OK\n");
                         test = 1;
@@ -44,6 +46,7 @@ void* comp(void *i) {
                 if (test) {
                     break;
                 }
+                max = pA[j]+in->kameny[pA[j]]>max?pA[j]+in->kameny[pA[j]]:max;
             }
             if (test) {
                *(in->result) = i;
